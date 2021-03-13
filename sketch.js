@@ -36,7 +36,8 @@ var platformHeight;
 
 var maxJump; //needed to cap the jump when the character is on the platform (isContact == true)
 
-var touchButtonsLocation;
+var leftTouchButtonLocation;
+var rightTouchButtonLocation;
 
 function startGame(){
 
@@ -128,7 +129,8 @@ function startGame(){
 
     maxJump = 0; //needed to cap the jump when the character is on the platform (isContact == true)
 
-    touchButtonsLocation = width/2;
+    leftTouchButtonLocation = 100;
+    rightTouchButtonLocation = width-100;
 }
 
 function setup()
@@ -193,14 +195,14 @@ function draw()
 
     //touch screen buttons
     fill(0);
-    ellipse(touchButtonsLocation-48, floorPos_y + 40, 45);
-    ellipse(touchButtonsLocation+48, floorPos_y + 40, 45);
+    ellipse(leftTouchButtonLocation-48, floorPos_y + 40, 45);
+    ellipse(rightTouchButtonLocation+48, floorPos_y + 40, 45);
 
     fill(255);
-    triangle (touchButtonsLocation-50, floorPos_y + 50, touchButtonsLocation-60, floorPos_y + 40, touchButtonsLocation-50, floorPos_y + 30); //left
-    triangle (touchButtonsLocation-40, floorPos_y + 50, touchButtonsLocation-50, floorPos_y + 40, touchButtonsLocation-40, floorPos_y + 30);
-    triangle (touchButtonsLocation+50, floorPos_y + 50, touchButtonsLocation+60, floorPos_y + 40, touchButtonsLocation+50, floorPos_y + 30); //right
-    triangle (touchButtonsLocation+40, floorPos_y + 50, touchButtonsLocation+50, floorPos_y + 40, touchButtonsLocation+40, floorPos_y + 30);
+    triangle (leftTouchButtonLocation-50, floorPos_y + 50, leftTouchButtonLocation-60, floorPos_y + 40, leftTouchButtonLocation-50, floorPos_y + 30); //left
+    triangle (leftTouchButtonLocation-40, floorPos_y + 50, leftTouchButtonLocation-50, floorPos_y + 40, leftTouchButtonLocation-40, floorPos_y + 30);
+    triangle (rightTouchButtonLocation+50, floorPos_y + 50, rightTouchButtonLocation+60, floorPos_y + 40, rightTouchButtonLocation+50, floorPos_y + 30); //right
+    triangle (rightTouchButtonLocation+40, floorPos_y + 50, rightTouchButtonLocation+50, floorPos_y + 40, rightTouchButtonLocation+40, floorPos_y + 30);
 
 
     pop();
@@ -232,9 +234,6 @@ function draw()
         
         return;
     }
-    
-
-
 
 
 	// Draw game character.
@@ -257,7 +256,8 @@ function draw()
                 gameChar_x -= 3;
             } else {
                 scrollPos += 3;
-                touchButtonsLocation -= 3;
+                leftTouchButtonLocation -= 3;
+                rightTouchButtonLocation -= 3;
             }
         }
 	}
@@ -271,8 +271,8 @@ function draw()
 		else
 		{
 			scrollPos -= 3; // negative for moving against the background
-            touchButtonsLocation += 3;
-		}
+            leftTouchButtonLocation += 3;
+            rightTouchButtonLocation += 3;		}
 	}
     
     //elegant way of jumping (need new variable isJumping)
@@ -370,18 +370,18 @@ function touchStarted(event) {
 
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, width/2-48, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, leftTouchButtonLocation-48, floorPos_y + 40) < 25) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width/2-48, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, leftTouchButtonLocation-48, floorPos_y + 40) < 25)
     )
     {
         isLeft = true;
     }
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, width/2+48, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, rightTouchButtonLocation+48, floorPos_y + 40) < 25) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width/2+48, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, rightTouchButtonLocation+48, floorPos_y + 40) < 25)
     )
     {
         isRight = true;
