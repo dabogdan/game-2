@@ -34,7 +34,9 @@ var isContact; // added global variable to control elegant jumping
 
 var platformHeight;
 
-var maxJump = 0; //needed to cap the jump when the character is on the platform (isContact == true)
+var maxJump; //needed to cap the jump when the character is on the platform (isContact == true)
+
+var touchButtonsLocation;
 
 function startGame(){
 
@@ -123,6 +125,10 @@ function startGame(){
     flagpole = {isReached: false, x_pos: 1500};
     
     died = false;
+
+    maxJump = 0; //needed to cap the jump when the character is on the platform (isContact == true)
+
+    touchButtonsLocation = width/2;
 }
 
 function setup()
@@ -184,8 +190,19 @@ function draw()
     if(!died){
         checkPlayerDie();
     }
-    
-    
+
+    //touch screen buttons
+    fill(0);
+    ellipse(touchButtonsLocation-48, floorPos_y + 40, 45);
+    ellipse(touchButtonsLocation+48, floorPos_y + 40, 45);
+
+    fill(255);
+    triangle (touchButtonsLocation-50, floorPos_y + 50, touchButtonsLocation-60, floorPos_y + 40, touchButtonsLocation-50, floorPos_y + 30); //left
+    triangle (touchButtonsLocation-40, floorPos_y + 50, touchButtonsLocation-50, floorPos_y + 40, touchButtonsLocation-40, floorPos_y + 30);
+    triangle (touchButtonsLocation+50, floorPos_y + 50, touchButtonsLocation+60, floorPos_y + 40, touchButtonsLocation+50, floorPos_y + 30); //right
+    triangle (touchButtonsLocation+40, floorPos_y + 50, touchButtonsLocation+50, floorPos_y + 40, touchButtonsLocation+40, floorPos_y + 30);
+
+
     pop();
 
     
@@ -217,6 +234,9 @@ function draw()
     }
     
 
+
+
+
 	// Draw game character.
 	
 	drawGameChar();
@@ -237,6 +257,7 @@ function draw()
                 gameChar_x -= 3;
             } else {
                 scrollPos += 3;
+                touchButtonsLocation -= 3;
             }
         }
 	}
@@ -250,6 +271,7 @@ function draw()
 		else
 		{
 			scrollPos -= 3; // negative for moving against the background
+            touchButtonsLocation += 3;
 		}
 	}
     
@@ -342,6 +364,34 @@ function keyReleased()
         isJumping = false;
     }
     
+}
+
+function touchStarted(event) {
+
+    if (
+        (event.type == "mousedown" &&
+            dist(event.clientX, event.clientY, width/2-48, floorPos_y + 40) < 25) ||
+        (event.type == "touchstart" &&
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width/2-48, floorPos_y + 40) < 25)
+    )
+    {
+        isLeft = true;
+    }
+    if (
+        (event.type == "mousedown" &&
+            dist(event.clientX, event.clientY, width/2+48, floorPos_y + 40) < 25) ||
+        (event.type == "touchstart" &&
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width/2+48, floorPos_y + 40) < 25)
+    )
+    {
+        isRight = true;
+    }
+    return false;
+}
+
+function touchEnded(event){
+    isLeft = false;
+    isRight = false;
 }
 
 
