@@ -370,18 +370,18 @@ function touchStarted(event) {
 
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, leftTouchButtonLocation-48, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, 100-48, floorPos_y + 40) < 25) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, leftTouchButtonLocation-48, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, 100-48, floorPos_y + 40) < 25)
     )
     {
         isLeft = true;
     }
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, rightTouchButtonLocation+48, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, width-100+48, floorPos_y + 40) < 25) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, rightTouchButtonLocation+48, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width-100+48, floorPos_y + 40) < 25)
     )
     {
         isRight = true;
