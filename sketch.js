@@ -197,6 +197,8 @@ function draw()
     fill(0);
     ellipse(leftTouchButtonLocation-48, floorPos_y + 40, 45);
     ellipse(rightTouchButtonLocation+48, floorPos_y + 40, 45);
+    ellipse(rightTouchButtonLocation-20, floorPos_y+40, 60, 45);
+    ellipse(leftTouchButtonLocation+20, floorPos_y+40, 60, 45);
 
     fill(255);
     triangle (leftTouchButtonLocation-50, floorPos_y + 50, leftTouchButtonLocation-60, floorPos_y + 40, leftTouchButtonLocation-50, floorPos_y + 30); //left
@@ -204,6 +206,9 @@ function draw()
     triangle (rightTouchButtonLocation+50, floorPos_y + 50, rightTouchButtonLocation+60, floorPos_y + 40, rightTouchButtonLocation+50, floorPos_y + 30); //right
     triangle (rightTouchButtonLocation+40, floorPos_y + 50, rightTouchButtonLocation+50, floorPos_y + 40, rightTouchButtonLocation+40, floorPos_y + 30);
 
+    textSize(16);
+    text('JUMP', rightTouchButtonLocation-40, floorPos_y+45);
+    text('JUMP', leftTouchButtonLocation, floorPos_y+45);
 
     pop();
 
@@ -367,7 +372,6 @@ function keyReleased()
 }
 
 function touchStarted(event) {
-
     if (
         (event.type == "mousedown" &&
             dist(event.clientX, event.clientY, 100-48, floorPos_y + 40) < 25) ||
@@ -386,6 +390,27 @@ function touchStarted(event) {
     {
         isRight = true;
     }
+    if (
+        (event.type == "mousedown" &&
+            dist(event.clientX, event.clientY, width-100, floorPos_y + 40) < 25) ||
+        (event.type == "touchstart" &&
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width-100, floorPos_y + 40) < 25)
+        )
+    {
+        isRight = true;
+        isJumping = true;
+    }
+    if (
+        (event.type == "mousedown" &&
+            dist(event.clientX, event.clientY, 100, floorPos_y + 40) < 25) ||
+        (event.type == "touchstart" &&
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, 100, floorPos_y + 40) < 25)
+    )
+    {
+        isLeft = true;
+        isJumping = true;
+    }
+
     return false;
 }
 
