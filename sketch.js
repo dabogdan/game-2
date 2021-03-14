@@ -88,7 +88,7 @@ function startGame(){
     ];
 
     canyons = [
-        {x_pos: 500, width: 100},
+
         {x_pos: 800, width: 80},
         {x_pos: 950, width: 80},
         {x_pos: 150, width: 100}
@@ -822,12 +822,17 @@ function drawTrees ()
     //  draw the tree
         noStroke();
         fill(74, 43, 18); //brown
-        rect(trees_x[i],floorPos_y-45,10,45); // tree trunk
+        rect(trees_x[i], floorPos_y-45,10,45); // tree trunk
 
         fill(21, 87, 47); //green
         triangle(trees_x[i]-25,floorPos_y-45,trees_x[i]+5,floorPos_y-97,trees_x[i]-35+70,floorPos_y-45); //lower branch
         triangle(trees_x[i]-25,floorPos_y-75,trees_x[i]+5,floorPos_y-127,trees_x[i]-35+70,floorPos_y-75); //middle branch
         triangle(trees_x[i]-25,floorPos_y-105,trees_x[i]+5,floorPos_y-157,trees_x[i]-35+70,floorPos_y-105);//higher branch
+
+        fill('rgba(50,50,50,.5)');//shadow
+        // translate(width / 2, height / 2);
+        // rotate(PI / 3.0);
+        ellipse(trees_x[i]+5, floorPos_y+20, 15, 50);//shadow
     }
 }
 
