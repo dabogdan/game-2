@@ -39,10 +39,15 @@ var maxJump; //needed to cap the jump when the character is on the platform (isC
 var leftTouchButtonLocation;
 var rightTouchButtonLocation;
 
+var angle;
+var angleUp = false;
+var angleDown = false;
+var rightLegVector;
+
 function startGame(){
 
     gameChar_x = 100;
-    gameChar_y = floorPos_y;
+    gameChar_y = 200;
 
     // Variable to control the background scrolling.
     scrollPos = 0;
@@ -74,22 +79,26 @@ function startGame(){
             isFound: false
         },
         {
-            x_pos: 900, 
-            y_pos: floorPos_y-10, 
+            x_pos: 850,
+            y_pos: floorPos_y-60,
             size: 30,
             isFound: false
         },
         {
-            x_pos: 120, 
-            y_pos: floorPos_y-10, 
+            x_pos: 700,
+            y_pos: floorPos_y-100,
+            size: 30,
+            isFound: false
+        },
+        {
+            x_pos: 300,
+            y_pos: floorPos_y-80,
             size: 30,
             isFound: false
         }
     ];
 
     canyons = [
-
-        {x_pos: 800, width: 80},
         {x_pos: 950, width: 80},
         {x_pos: 150, width: 100}
     ];
@@ -131,11 +140,16 @@ function startGame(){
 
     leftTouchButtonLocation = 100;
     rightTouchButtonLocation = width-100;
+
+    angle = 1/10;
+
+    rightLegVector = createVector(-15,5)
 }
 
 function setup()
 {
 	createCanvas(windowWidth, windowHeight);
+
 	floorPos_y = height * 3/4;
    
     lives = 3;
@@ -207,8 +221,8 @@ function draw()
     triangle (rightTouchButtonLocation+40, floorPos_y + 50, rightTouchButtonLocation+50, floorPos_y + 40, rightTouchButtonLocation+40, floorPos_y + 30);
 
     textSize(16);
-    text('JUMP', rightTouchButtonLocation-40, floorPos_y+45);
-    text('JUMP', leftTouchButtonLocation, floorPos_y+45);
+    text('JUMP', rightTouchButtonLocation-41, floorPos_y+45);
+    text('JUMP', leftTouchButtonLocation-1, floorPos_y+45);
 
     pop();
 
@@ -338,13 +352,13 @@ function keyPressed(){
 	// keys are pressed.
     if (keyCode == 37) {
         isLeft = true;
+        angleUp = true;
     }
     if (keyCode == 39) {
         isRight = true;
+        angleUp = true;
     }
-//    if(keyCode == 32 && gameChar_y == floorPos_y) {
-//        isJumping = true;
-//    }
+
     if(keyCode == 32 && (gameChar_y == floorPos_y || isContact)) {
         isJumping = true;
     }
@@ -358,9 +372,13 @@ function keyReleased()
 	// keys are released.
     if (keyCode == 37) {
         isLeft = false;
+        angleUp = false;
+        angleDown = false;
     }
     if (keyCode == 39) {
         isRight = false;
+        angleUp = false;
+        angleDown = false;
     }
 //elegant jumping
     if(keyCode == 32) {
@@ -379,6 +397,8 @@ function touchStarted(event) {
     )
     {
         isLeft = true;
+        angleUp = true;
+
     }
     if (
         (event.type == "mousedown" &&
@@ -388,6 +408,8 @@ function touchStarted(event) {
     )
     {
         isRight = true;
+        angleUp = true;
+
     }
     if (
         (event.type == "mousedown" &&
@@ -402,6 +424,7 @@ function touchStarted(event) {
         {
             isRight = true;
             isJumping = true;
+            angleUp = true;
         }
     }
     if (
@@ -427,6 +450,9 @@ function touchStarted(event) {
 function touchEnded(event){
     isLeft = false;
     isRight = false;
+    isJumping = false;
+    angleDown = false;
+    angleDown = false;
 }
 
 
@@ -593,10 +619,8 @@ function drawGameChar()
 
         fill(0);
         noStroke();
-        rect(gameChar_x-7,gameChar_y-15,5,15); //left leg
-        rect(gameChar_x-11,gameChar_y,9,3); //left foot
-        rect(gameChar_x+3,gameChar_y-15,5,15); //right leg
-        rect(gameChar_x-1,gameChar_y,9,3); //right foot
+        checkAngle();
+        moveLeft();
 
 	}
 	else if(isRight)
@@ -649,11 +673,10 @@ function drawGameChar()
 
         fill(0);
         noStroke();
-        rect(gameChar_x-7,gameChar_y-15,5,15); //left leg
-        rect(gameChar_x-7,gameChar_y,9,3); //left foot
-        rect(gameChar_x+3,gameChar_y-15,5,15); //right leg
-        rect(gameChar_x+3,gameChar_y,9,3); //right foot
-	}
+
+        checkAngle();
+        moveRight();
+    }
 	else if(isFalling || isPlummeting || isJumping)
 	{
 		// add your jumping facing forwards code
@@ -830,9 +853,11 @@ function drawTrees ()
         triangle(trees_x[i]-25,floorPos_y-105,trees_x[i]+5,floorPos_y-157,trees_x[i]-35+70,floorPos_y-105);//higher branch
 
         fill('rgba(50,50,50,.5)');//shadow
-        // translate(width / 2, height / 2);
-        // rotate(PI / 3.0);
-        ellipse(trees_x[i]+5, floorPos_y+20, 15, 50);//shadow
+        push()
+        translate(trees_x[i]-13,floorPos_y+13);
+        rotate(1);
+        ellipse(0, 0, 15, 50);//shadow
+        pop();
     }
 }
 
@@ -964,4 +989,69 @@ function createPlatforms (x,y,length,) {
         }
     }
     return p;
+}
+
+function checkAngle() {
+    if (angleUp && angle < .3) {
+        angle += .02;
+        if(angle > .2) {
+            angleUp = false;
+            angleDown = true;
+        }
+    }
+    if(angleDown){
+        angle -= .02;
+        if(angle < 0) {
+            angleUp = true;
+            angleDown = false;
+        }
+    }
+}
+
+function moveRight () {
+    push()
+    translate(gameChar_x-7,gameChar_y-16);
+    rotate(angle);
+    rect(0,0,5,15); //left leg
+    pop();
+    push();
+    translate(gameChar_x-8,gameChar_y-3);
+    rotate(angle);
+    rect(0,0,8,3); //left foot
+    pop();
+
+    push();
+    translate(gameChar_x+3,gameChar_y-15);
+    rotate(-angle);
+    rect(0,0,5,15); //right leg
+    pop();
+    push();
+    translate(gameChar_x+7,gameChar_y-3)
+    rotate(-angle);
+    rect(0,0,8,3); //right foot
+    pop();
+}
+
+function moveLeft () {
+    push()
+    translate(gameChar_x-7,gameChar_y-16);
+    rotate(angle);
+    rect(0,0,5,15); //left leg
+    pop();
+    push();
+    translate(gameChar_x-4,gameChar_y-3);
+    rotate(angle);
+    rect(0,0,-9,3); //left foot
+    pop();
+
+    push();
+    translate(gameChar_x+3,gameChar_y-15);
+    rotate(-angle);
+    rect(0,0,5,15); //right leg
+    pop();
+    push();
+    translate(gameChar_x+9,gameChar_y-3)
+    rotate(-angle);
+    rect(0,0,-9,3); //right foot
+    pop();
 }
