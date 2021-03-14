@@ -282,7 +282,6 @@ function draw()
     
     //elegant way of jumping (need new variable isJumping)
     if (isJumping) {
-        console.log(isContact);
         if(!isContact){
             gameChar_y -= 12;
             if (gameChar_y <= floorPos_y - 100) {
@@ -291,7 +290,6 @@ function draw()
         }
         if(isContact){
             gameChar_y -= 12;
-            console.log(maxJump, gameChar_y);
             if (gameChar_y <= maxJump) {
                 isJumping = false;
                 isFalling = true;
@@ -371,6 +369,7 @@ function keyReleased()
     
 }
 
+//touch for mobile devices
 function touchStarted(event) {
     if (
         (event.type == "mousedown" &&
@@ -392,23 +391,34 @@ function touchStarted(event) {
     }
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, width-100, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, width-120, floorPos_y + 40) < 35) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width-100, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, width-120, floorPos_y + 40) < 35)
         )
     {
-        isRight = true;
-        isJumping = true;
+        if(gameChar_y === floorPos_y ||
+            gameChar_y === platformHeight.low-1 ||
+            gameChar_y === platformHeight.high)
+        {
+            isRight = true;
+            isJumping = true;
+        }
     }
     if (
         (event.type == "mousedown" &&
-            dist(event.clientX, event.clientY, 100, floorPos_y + 40) < 25) ||
+            dist(event.clientX, event.clientY, 120, floorPos_y + 40) < 35) ||
         (event.type == "touchstart" &&
-            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, 100, floorPos_y + 40) < 25)
+            dist(event.changedTouches[0].clientX, event.changedTouches[0].clientY, 120, floorPos_y + 40) < 35)
     )
     {
-        isLeft = true;
-        isJumping = true;
+        if(
+            gameChar_y === floorPos_y ||
+            gameChar_y === platformHeight.low-1 ||
+            gameChar_y === platformHeight.high)
+        {
+            isLeft = true;
+            isJumping = true;
+        }
     }
 
     return false;
