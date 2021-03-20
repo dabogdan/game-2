@@ -48,34 +48,30 @@ var angle;
 var angleUp;
 var angleDown;
 
-//sounds variables
-var allSounds;
-var jumpSound;
-var coinSound;
-var dieSound;
-var gameOverSound;
-var bumpSound;
-var stageClearSound;
+// //sounds variables
+// var allSounds;
+// var jumpSound;
+// var coinSound;
+// var dieSound;
+// var gameOverSound;
+// var bumpSound;
+// var stageClearSound;
 
 function preload() {
-    //sounds
-    soundFormats('mp3', 'wav');
-    allSounds = [
-        jumpSound = loadSound('assets/sounds/jump.mp3'),
-        coinSound = loadSound('assets/sounds/coin.mp3'),
-        dieSound = loadSound('assets/sounds/die.wav'),
-        gameOverSound = loadSound('assets/sounds/gameover.wav'),
-        bumpSound = loadSound('assets/sounds/bump.wav'),
-        stageClearSound = loadSound('assets/sounds/stage_clear.wav'),
-    ];
-
-    // for (let i = 0; i < allSounds.length; i++) {
-    //     allSounds[i].setVolume(0.1);
-    // }
-
-    allSounds.forEach((e) => {
-        e.setVolume(0.1);
-    });
+    // //sounds
+    // soundFormats('mp3', 'wav');
+    // allSounds = [
+    //     jumpSound = loadSound('assets/sounds/jump.mp3'),
+    //     coinSound = loadSound('assets/sounds/coin.mp3'),
+    //     dieSound = loadSound('assets/sounds/die.wav'),
+    //     gameOverSound = loadSound('assets/sounds/gameover.wav'),
+    //     bumpSound = loadSound('assets/sounds/bump.wav'),
+    //     stageClearSound = loadSound('assets/sounds/stage_clear.wav'),
+    // ];
+    // //set volume for all the sounds to 0.1
+    // allSounds.forEach((e) => {
+    //     e.setVolume(0.1);
+    // });
     // images
     coinPic = loadImage('assets/pics/Coin.png');
 }
@@ -295,22 +291,24 @@ function draw() {
     }
 
     //touch screen buttons
-    fill(0);
-    ellipse(leftTouchButtonLocation - 48, floorPos_y + 40, 45);
-    ellipse(rightTouchButtonLocation + 48, floorPos_y + 40, 45);
-    ellipse(rightTouchButtonLocation - 20, floorPos_y + 40, 60, 45);
-    ellipse(leftTouchButtonLocation + 20, floorPos_y + 40, 60, 45);
 
-    fill(255);
-    triangle(leftTouchButtonLocation - 50, floorPos_y + 50, leftTouchButtonLocation - 60, floorPos_y + 40, leftTouchButtonLocation - 50, floorPos_y + 30); //left
-    triangle(leftTouchButtonLocation - 40, floorPos_y + 50, leftTouchButtonLocation - 50, floorPos_y + 40, leftTouchButtonLocation - 40, floorPos_y + 30);
-    triangle(rightTouchButtonLocation + 50, floorPos_y + 50, rightTouchButtonLocation + 60, floorPos_y + 40, rightTouchButtonLocation + 50, floorPos_y + 30); //right
-    triangle(rightTouchButtonLocation + 40, floorPos_y + 50, rightTouchButtonLocation + 50, floorPos_y + 40, rightTouchButtonLocation + 40, floorPos_y + 30);
+    if (window.width < 992) {
+        fill(0);
+        ellipse(leftTouchButtonLocation - 48, floorPos_y + 40, 45);
+        ellipse(rightTouchButtonLocation + 48, floorPos_y + 40, 45);
+        ellipse(rightTouchButtonLocation - 20, floorPos_y + 40, 60, 45);
+        ellipse(leftTouchButtonLocation + 20, floorPos_y + 40, 60, 45);
 
-    textSize(16);
-    text('JUMP', rightTouchButtonLocation - 41, floorPos_y + 45);
-    text('JUMP', leftTouchButtonLocation - 1, floorPos_y + 45);
+        fill(255);
+        triangle(leftTouchButtonLocation - 50, floorPos_y + 50, leftTouchButtonLocation - 60, floorPos_y + 40, leftTouchButtonLocation - 50, floorPos_y + 30); //left
+        triangle(leftTouchButtonLocation - 40, floorPos_y + 50, leftTouchButtonLocation - 50, floorPos_y + 40, leftTouchButtonLocation - 40, floorPos_y + 30);
+        triangle(rightTouchButtonLocation + 50, floorPos_y + 50, rightTouchButtonLocation + 60, floorPos_y + 40, rightTouchButtonLocation + 50, floorPos_y + 30); //right
+        triangle(rightTouchButtonLocation + 40, floorPos_y + 50, rightTouchButtonLocation + 50, floorPos_y + 40, rightTouchButtonLocation + 40, floorPos_y + 30);
 
+        textSize(16);
+        text('JUMP', rightTouchButtonLocation - 41, floorPos_y + 45);
+        text('JUMP', leftTouchButtonLocation - 1, floorPos_y + 45);
+    }
     renderFlagpole();
 
     //night
@@ -359,9 +357,9 @@ function draw() {
         text('Press space to continue', width / 2 - 120, height / 2 + 50);
 
         noLoop();
-        setTimeout(() => {
-            allSounds[3].play();
-        }, 2600);
+        // setTimeout(() => {
+        //     allSounds[3].play();
+        // }, 2600);
         return;
     }
 
@@ -390,7 +388,7 @@ function draw() {
             }
         }
         if (gameChar_x < scrollPos - 98) {
-            allSounds[4].play();
+            // allSounds[4].play();
             gameChar_x += 40;
             isLeft = false;
         }
@@ -473,7 +471,7 @@ function keyPressed() {
 
     if (keyCode == 32 && (gameChar_y == floorPos_y || isContact)) {
         isJumping = true;
-        allSounds[0].play();
+        // allSounds[0].play();
     }
 
 
@@ -500,6 +498,7 @@ function keyReleased() {
 }
 
 //touch for mobile devices
+
 function touchStarted(event) {
     if (
         (event.type == "mousedown" &&
@@ -533,7 +532,7 @@ function touchStarted(event) {
             isRight = true;
             isJumping = true;
             angleUp = true;
-            allSounds[0].play();
+            // allSounds[0].play();
         }
     }
     if (
@@ -549,10 +548,9 @@ function touchStarted(event) {
             isLeft = true;
             isJumping = true;
             angleUp = true;
-            allSounds[0].play();
+            // allSounds[0].play();
         }
     }
-
     return false;
 }
 
@@ -563,8 +561,6 @@ function touchEnded() {
     angleDown = false;
     angleDown = false;
 }
-
-
 // ------------------------------
 // Game character render function
 // ------------------------------
@@ -975,9 +971,6 @@ function drawCanyon(t_canyon) {
         t_canyon.x_pos + t_canyon.width, height,
         t_canyon.x_pos + t_canyon.width * 1 / 3, height
     );
-    // fill(255,215,0);
-    // rect(t_canyon.x_pos, floorPos_y, t_canyon.width - 40, height);//yellow space for the character to fall within
-
 }
 
 // Function to check character is over a canyon.
@@ -1026,7 +1019,7 @@ function checkCollectable(t_collectable) {
     ) {
         t_collectable.isFound = true;
         game_score += 1;
-        allSounds[1].play();
+        // allSounds[1].play();
     }
 }
 
@@ -1060,7 +1053,7 @@ function checkFlagpole() {
 
 function checkPlayerDie() {
     if (gameChar_y >= floorPos_y + 140 && lives > 0) {
-        allSounds[2].play();
+        // allSounds[2].play();
         lives -= 1;
         died = true;
         setTimeout(startGame, 2500);
@@ -1165,7 +1158,6 @@ function levelComplete() {
     textSize(20);
     text('Refresh the page to start afresh', width / 2 - 100, height / 2 + 50);
 
-    allSounds[5].play();
+    // allSounds[5].play();
     noLoop();
-
 }
